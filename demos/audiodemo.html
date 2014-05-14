@@ -1,0 +1,336 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Audio Demo</title>
+  <link rel="stylesheet" href="stylesheets/default.css" type="text/css" /> 
+  <script src="http://ocwscse.optaresolutions.com:7001/api/wsc.js" type="text/javascript"></script>  
+  <script src="../js/demosupport.js" type="text/javascript"></script>
+</head>
+<!-- Specify onload event handler for rehydration. Method onPageLoad is defined in demosupport.js -->
+<body onload="onPageLoad()">
+  <h2 id="heading">Welcome to WSC demo -- Audio Call</h2>
+  <!-- Button for login. This is a start point of this page. 
+       Method register is invoked when the button is clicked. -->
+  <div id="statusArea"></div>
+  <div id="currentCommand">
+     <input type="button" name="loginButton" id="loginButton"
+      value="Register" onclick="register()" />
+  </div>
+
+  <br>
+  <br>
+  <table hidden="true" id="videos">
+    <tr>
+      <td>You</td>
+      <td>Remote</td>
+    </tr>
+    <tr>
+    </tr>
+    <!-- TODO: video elements are not needed in this demo. -->
+    <tr>
+      <td width="15%">
+        <!--<audio id="selfView" autoplay></audio>--> <video id="selfView"
+          autoplay src=""></video>
+      </td>
+      <td width="15%">
+        <!-- <audio id="remoteView" autoplay></audio>--> <video
+          id="remoteView" autoplay src=""></video>
+      </td>
+    </tr>
+    <!-- HTML5 audio element. -->
+    <tr>
+      <td width="15%"><audio id="selfAudio" autoplay muted="true"></audio></td>
+      <td width="15%"><audio id="remoteAudio" autoplay></audio></td>
+    </tr>    
+  </table>
+
+  <div id="test">
+  <!-- Button to clear log text in page. -->
+    <input type="button" name="testButton" id="testButton"
+      value="Clear Screen" onclick="clearText('output')" />
+  </div>
+  <!-- The "div" to hold log text. -->
+  <div id='output' name='output' style='color: green; font-size: 15px'></div>
+
+<script type="text/javascript">
+  //*************security login****************
+  // Defined in demosupport.js
+  initalizeRegisterUI();
+  //*************************************
+  demoName = " Audio Call Demo ";
+  isVideo = false;
+  var callPackage,remoteView, selfView;
+  wsc.setLogLevel(wsc.LOGLEVEL.DEBUG);
+  var audioMediaDirection = wsc.MEDIADIRECTION.SENDRECV;
+  var videoMediaDirection = wsc.MEDIADIRECTION.NONE;
+  // create a CallConfig object.
+  var callConfig = new wsc.CallConfig(audioMediaDirection,videoMediaDirection);
+  var isPageReload = false;
+  //Here sample code for extHeader
+  var extheader ={'customerKey1':'value1','customerKey2':'value2', 'MyHeader':'header value2'};
+
+
+  // Create a Session object. 
+  function register() {
+    var btnRegister = document.getElementById("loginButton");
+    // Hide the "Register" button after it is clicked.
+    if (btnRegister) {
+      btnRegister.disabled = true;
+    }
+    var userName = document.getElementById("userName").value;
+    // Create session.
+    initSession(userName);
+    // Create a extended CallPackage. 
+    // This demo is also used for depicting extensibility of WSC JS API.
+    callPackage = new CallPackageExtension(wscSession);
+    // Bind event handler. Function onResurrect is defined in demosupport.js.
+    if(callPackage){
+      callPackage.onIncomingCall = onIncomingCall;
+      callPackage.onResurrect = onResurrect;
+    }
+  }
+
+
+  //On incoming call callback
+  // When is event handler is invoked, draw two buttons for users to 
+  // accept or decline the incoming call.
+  // Attach onclick event handler for these two buttons.
+  function onIncomingCall(callObj, callConfig) {
+     var  definedArgLen=2,extheader=null;
+     if (arguments.length > definedArgLen) {
+      extheader = arguments[definedArgLen];
+     };
+     icmd = "<input type='button' name='acceptButton' id='acceptButton' value='Accept "
+        + callObj.getCaller()
+        + " Incoming Audio Call' onclick=''/><input type='button' name='declineButton' id='declineButton' value='Decline Incoming Audio Call' onclick=''/>"
+        + "<br><br><hr>";
+     if(extheader){
+        icmd += "The extended headers:"+ JSON.stringify(extheader);
+     }
+
+    setCmd(icmd);
+    //callObj.iceTimeout = 3000;
+    document.getElementById("acceptButton").onclick = function() {
+      callObj.accept(callConfig, null, extheader);
+    }
+    document.getElementById("declineButton").onclick = function() {
+      callObj.decline(null, extheader);
+    }
+    // initCallback is defined in demosupport.js
+    initCallback(callObj);
+    call = callObj;
+  }
+
+
+  // Event handler for changes of call state.
+  function onCallStateChange(callObj, callState) {
+    setStatus("call state: " + callState.state);
+    showResults("callstate : " + JSON.stringify(callState));
+    if (callState.state == wsc.CALLSTATE.ESTABLISHED) {
+      callEstablished(callObj);
+    } else if (callState.state == wsc.CALLSTATE.ENDED
+        || callState.state == wsc.CALLSTATE.FAILED) {
+      initializeCommand();
+      remoteView = document.getElementById("remoteView");
+      attachMediaStream(remoteView, null);
+    }
+  }
+  
+  // This event handler is invoked when "Call" button is clicked.
+  onCallSomeOne = function() {
+
+    callee = document.getElementById("callee").value;
+    if (callee.indexOf("@") < 0) {
+      callee = callee + "@example.com";
+    }
+
+    printResults("Calling... " + callee);
+    // Here, would determine if callee is PSTN terminal.
+    var callPSTN = false;
+    var regExpPstn = new RegExp("^[0-9]+@");
+    if (regExpPstn.test(callee)) {
+      callPSTN = true;
+    }
+    printResults("Web call PSTN: " + callPSTN);
+    
+    // To call someone, create a Call object first. 
+    var call = callPackage.createCall(callee, callConfig, doCallError);
+    if (call != null) {
+      if (callPSTN) {
+        // set iceTimeout to call config so that offer is sent only one time 
+        // after given timeout for candidate gathering.
+        // This is just a workaround.
+        call.iceTimeout = 3000;
+      }
+      initCallback(call);
+      // Then start the call.
+      call.start(null, extheader);
+      // Disable "Call" button and enable "Cancel" button.
+      var callButton = document.getElementById("callButton");
+      callButton.disabled = true;
+      var cancelButton = document.getElementById("cancelButton");
+      cancelButton.disabled = false;
+      cancelButton.onclick = function() {
+        //call.end();
+        call.end(extheader);
+      }
+    }
+  }
+  
+  // Render the page when call is established.
+  // This method is invoked by onCallStateChange. 
+  function callEstablished(callObj) {
+    var icmd = "<input type='button' name='hButton' id='hButton' value='Hangup' onclick=''/>"
+        + "<br><br>";       
+    setCmd(icmd);
+    document.getElementById("hButton").onclick = function() {
+      // callObj.end();
+      callObj.end(extheader);
+    };
+
+    document.getElementById("sendInfo").onclick = function() {
+      callObj.sendInfoMessage();
+    };
+  }
+  
+  // This event handler is invoked when media stream event is fired.
+  // Attach media stream to HTML5 audio element.
+  function mediaStateCallback(mediaState, stream) {
+    showResults("mediastate : " + mediaState);
+    //var rurl = webkitURL.createObjectURL(stream);
+
+    var audioTracks = null;
+    var videoTracks = null;
+    if (stream.audioTracks) {
+      // old version
+      audioTracks = stream.audioTracks;
+      videoTracks = stream.videoTracks;
+    } else {
+      // new version
+      audioTracks = stream.getAudioTracks();
+      videoTracks = stream.getVideoTracks();
+    }
+
+    if (mediaState == wsc.MEDIASTREAMEVENT.LOCAL_STREAM_ADDED) {
+      //if (videoTracks.length > 0) {
+      //  showResults("Local video stream is added.");
+      //  attachMediaStream(selfView, stream);
+      //} else if (audioTracks.length > 0) {
+      //  showResults("Local audio stream is added.");
+      //}
+      attachMediaStream(document.getElementById("selfAudio"), stream);
+    } else if (mediaState == wsc.MEDIASTREAMEVENT.REMOTE_STREAM_ADDED) {
+      //if (videoTracks.length > 0) {
+      //  showResults("Remote video stream is added.");
+      //  attachMediaStream(remoteView, stream);
+      //} else if (audioTracks.length > 0) {
+      //  showResults("Remote audio stream is added.");
+      //}
+      attachMediaStream(document.getElementById("remoteAudio"), stream);
+    }
+  }
+  
+  // Append INFO message to infoBox textarea.
+  function appendChatMsg(sender, msg) {
+    var box = document.getElementById("infoBox");
+    var input = document.getElementById("customizedInfo");
+    var d = new Date();
+    var n = d.toLocaleTimeString();
+    msg = "(" + n + ") " + sender + ": " + msg + "\r\n";
+    box.value = box.value + msg;
+    box.scrollTop = box.scrollHeight;
+    input.focus();
+    input.select();
+  };
+
+  //++++++++++++++++++++++++++++++++++++++ extension start +++++++++++++++++++++++++++++++++++++++++++
+  // Create new classes "CallExtension" and "CallPackageExtension" by 
+  // extending Call and CallPackage. Add new functions to handle INFO message.
+  function CallExtension() {
+    //chain constructors
+    //In the below statement, 'arguments' is an implicit array of arguments passed to this function  
+    console.log("In CallExtension constructor.");
+    CallExtension.superclass.constructor.apply(this, arguments)
+  }
+
+  //override the method onMessage in the base class to support handling INFO messages
+  CallExtension.prototype.onMessage = function(message) {
+    console.log("In CallExtension onMessage method.");
+    //check if this is an info message, if so, handle it here
+    if (this.isInfoMessage(message)) {
+      console.log("Got an INFO message...");
+      //handle info message
+      var infoText = message.payload.content;
+      var sender = message.header.initiator;
+      appendChatMsg(sender, infoText);
+    } else {
+      console.log("Not an INFO message, invoke onMessage of Call.");
+      //delegate the handling to the base class
+      CallExtension.superclass.onMessage.call(this, message)
+    }
+  };
+
+  // Check if the message is an INFO message.
+  CallExtension.prototype.isInfoMessage = function(message) {
+    var action = message.header.action, type = message.control.type;
+    return action === "info" && type === "message";
+  };
+
+  //extend the Call object - the wsc.extend is a utility function that we provide. More details on this function is here 
+  //http://telcoeng.us.oracle.com/wiki/occas/Kraken/fs/JavaScriptCodingStyle#Extensibility
+
+  wsc.extend(CallExtension, wsc.Call);
+
+  //add additional methods to support sending INFO messages
+  CallExtension.prototype.sendInfoMessage = function() {
+    console.log("Send an INFO message.");
+    var text = document.getElementById("customizedInfo").value;
+    var target;
+    var initiator = this.session.userName;
+    if (initiator == this.getCaller()) {
+      target = this.getCallee();
+    } else {
+      target = this.getCaller();
+    }
+    var msg = {
+      "control" : {
+        "type" : "message",
+        "version" : "1.0",
+        "sequence" : this.session.getLastOutboundSeq() + 1,
+        "ack_sequence" : this.session.lastServerSequence,
+        "subsession_id" : this.subSessionId,
+        //          "correlation_id" : "c1",
+        "package_type" : this.packageHandler.packageType
+      },
+      "header" : {
+        "action" : "info",
+        "initiator" : initiator,
+        "target" : target
+      },
+      "payload" : {
+        "content" : text
+      }
+    };
+    wscSession.sendMessage(new wsc.Message(msg), true);
+
+    appendChatMsg(userName, text);
+  }
+
+  var CallPackageExtension = function() {
+    console.log("In CallPackageExtension constructor.");
+    //sub-class must invoke the superclass's constructor
+    CallPackageExtension.superclass.constructor.apply(this, arguments);
+  };
+
+  CallPackageExtension.prototype.prepareCall = function(session, callConfig,
+      caller, callee) {
+    console.log("In CallPackageExtension, prepareCall method.");
+    return new CallExtension(session, callConfig, caller, callee);
+  };
+
+  wsc.extend(CallPackageExtension, wsc.CallPackage);
+
+  //++++++++++++++++++++++++++++++++++++++ extension end +++++++++++++++++++++++++++++++++++++++++++
+</script>
+</body>
+</html>

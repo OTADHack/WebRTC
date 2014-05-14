@@ -1,0 +1,14 @@
+<h1>Login successful</h1>
+
+<div id="closeWindow">
+    <input type="button" name="close" id="close"
+           value="Close Window" onclick="closeWindow()" />
+</div>
+
+<script type="text/javascript">
+
+    function closeWindow() {
+        window.opener.loginCallback();
+        window.close();
+    }
+</script>

@@ -1,0 +1,40 @@
+<html>
+<head>
+  <title>WSC Demo Overview</title>
+</head>
+
+<body style="background: url('../images/bg.png') repeat-x top left;">
+  <h1>WSC Demo Overview page</h1>
+  <hr />
+
+  <ul>
+    <li>
+        To start Audio Demo: <a id="audio_href" target="_self" href="audiodemo.html">click here</a>
+        <BR><BR>
+    </li>
+    <li>
+        To start Video Demo: <a id="video_href" target="_self" href="videodemo.html">click here</a>
+        <BR><BR>
+    </li>
+  </ul>
+
+<script type="text/javascript">
+  var audio = document.getElementById("audio_href");
+  var video = document.getElementById("video_href");
+    
+    var localString = String(window.document.location.href);
+    var audioUrl = "http://" + window.location.hostname + ":" + window.location.port + "/wscsample/demos/audiodemo.html?";
+    var videoUrl = "http://" + window.location.hostname + ":" + window.location.port + "/wscsample/demos/videodemo.html?";
+       
+    audio.href = audioUrl;
+    video.href = videoUrl;
+
+    function closeWindow() {
+        window.opener = null;
+    	window.open(' ', '_self', ' '); 
+    	window.close();
+    }
+    
+</script>
+</body>
+</html>

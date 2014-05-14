@@ -1,0 +1,126 @@
+  a:link { color: #ffffff; }
+  a:visited {color: #ffffff; }
+  html, body {
+    background-color: #A9E2F3;
+    height: 100%;
+    font-family:Verdana, Arial, Helvetica, sans-serif;    
+  }
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  #container {
+    background-color: #B18904;
+    position: relative;
+    min-height: 100%;
+    width: 100%;
+    margin: 0px auto;
+    -webkit-perspective: 1000;
+  }
+  #card {
+  	width: 320px;
+	height: 240px;
+	float: left;
+	border: 1px solid #999999;
+    -webkit-transition-property: rotation;
+    -webkit-transition-duration: 2s;
+    -webkit-transform-style: preserve-3d;
+  }
+  #local {
+    float: left;
+    width: 50%;
+    -webkit-transform: scale(-1, 1);
+    -webkit-backface-visibility: hidden;
+  }
+  #remote {
+    float: left;
+    width: 50%;
+    -webkit-backface-visibility: hidden;
+  }
+  #mini {
+    position: absolute;
+    height: 30%;
+    width: 30%;
+    bottom: 32px;
+    right: 4px;
+    -webkit-transform: scale(-1, 1);
+    opacity: 1.0;
+  }
+  #localVideo {
+    opacity: 1;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 2s;
+  }
+  #remoteVideo {
+    opacity: 1;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 2s;
+  }
+  #miniVideo {
+    opacity: 1;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 2s;
+  }
+  #statusArea {
+    spacing: 4px;
+    width: 100%;
+    height: 28px;
+    background-color: #3F3F3F;
+    color: rgb(255, 255, 255);
+    font-size:13px; font-weight: bold;
+    line-height: 28px;
+    text-align: center;
+  }
+  #hangup {
+   font-size:13px; font-weight:bold;
+   color:#FFFFFF;
+   width:128px;
+   height:24px;
+   background-color:#808080;
+   border-style:solid;
+   border-color:#FFFFFF;
+   margin:2px;
+  }
+
+  #logo {
+    display: block;
+    top:4;
+     right:4; 
+     position:absolute;
+    width: 15%;
+    height: 140px;
+    float:right;
+    opacity: 1;
+  }
+  
+  #logo2 {
+    display: block;
+    top:4;
+    right:300;
+    position:absolute;
+    width: 15%;
+    height: 50px;
+    float:right;
+    opacity: 1;
+  }
+    #controlPanel {    
+      spacing: 4px;   
+/*       position: absolute;    */
+      top: 4;   
+      width: 60%;   
+      height: 150px;   
+/*      background-color: #3F3F3F;  */ 
+      color: rgb(255, 255, 255);   
+      font-size:18px; font-weight: bold;   
+      line-height: 28px;   
+      text-align: center;   
+     }  
+
+.clear {
+   height: 0;
+   font-size: 1px;
+   margin: 0;
+   padding: 0;
+   line-height: 0;
+   clear: both;
+}
