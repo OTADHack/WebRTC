@@ -24,7 +24,7 @@ cd WebRTC/SAMPLE_APP
 ```
 + Build the togetherjs project 
 ```sh
-cd togetherjs
+cd togetherjs4oracle
 grunt build buildsite --no-hardlink --force
 ```
 + Run the nodejs server
