@@ -31,28 +31,28 @@ grunt build buildsite --no-hardlink --force
 ```sh
 node devserver.js
 ```
-+ Open a first instance of your WebRTC compatible browser (Chrome or Firefox).
-Enter the url 'http://localhost:8080/tadhack/test_user.html'.
-Cancel if a popup window appears.
-Click the button 'Login to Oracle Communications WebRTC platform for TADHack 2014'. Enter your credentials here.
-Enter 'user1' as username in the prompt window.
++ Open a first instance of your WebRTC compatible browser (Chrome or Firefox).  
+Enter the url 'http://localhost:8080/tadhack/test_user.html'.  
+Cancel if a popup window appears.  
+Click the button 'Login to Oracle Communications WebRTC platform for TADHack 2014'. Enter your credentials here.  
+Enter 'user1' as username in the prompt window.  
 Click the button 'Start TogetherJS'. A blue bar appears at the right of the web page.
-+ Open a second instance of your WebRTC compatible browser (Chrome or Firefox), this time in incognito mode.
++ Open a second instance of your WebRTC compatible browser (Chrome or Firefox), this time in incognito mode.  
 Repeat the same steps as with first instance, but now entering the 'user2' value as username.
-+ Proceed with the webRTC audio call from any of the two browser instances.
-Click on the microphone button with the label 'Begin/End a WebRTC audio connection'.
++ Proceed with the webRTC audio call from any of the two browser instances.  
+Click on the microphone button with the label 'Begin/End a WebRTC audio connection'.  
 In the other browser window, accept the 'Incoming call' notification.
-+ Start the conversation and enjoy!
++ Start the conversation and enjoy!  
 Note that if you are executing the two instances from the same computer, you will probably hear some echo.
-+ End your conversation.
++ End your conversation.  
 Click on the microphone button with the label 'Begin/End a WebRTC audio connection'.
 
 Developer notes
 ----
 
-+ The togetherJS code has been modified in order to replace the standard webRTC with the [API offered by Oracle Communications WebRTC Session Controller](http://docs.oracle.com/cd/E40972_01/doc.70/e40978/toc.htm)
++ The togetherJS code has been modified in order to replace the standard webRTC with the [API offered by Oracle Communications WebRTC Session Controller](http://docs.oracle.com/cd/E40972_01/doc.70/e40978/toc.htm)  
 The main changes are located in the `togetherjs\webrtc.js` file.
-+ You can easily test this application with your own web page, in order to include this WebRTC sharing bar.
++ You can easily test this application with your own web page, in order to include this WebRTC sharing bar.  
 Replace the 'test_user.html' file with your web page.
 + When testing or debugging your own application with the browser, it is strongly recommended to enable the Javascript console (try to press F12)
 
