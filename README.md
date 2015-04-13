@@ -6,7 +6,7 @@ Source code of a **WebRTC Sample** providing webRTC audio and video call.
 Version
 ----
 
-7.0
+7.1
 
 Usage
 ----
