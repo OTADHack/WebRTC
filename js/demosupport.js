@@ -13,9 +13,9 @@ function includeJS(jsPath) {
 //**************Initialize variables******************************/
   var wsUri,loginUri,userName, wscSession,callHandler,sessionId = null,logoutUri,
       isVideo=false,callConfig,demoName ="Demo", onIncomingCallCmd;
-  wsUri = "ws://ocwscse.optaresolutions.com:7001/ws/webrtc/guest";
+  wsUri = "ws://ocwsc71se.optaresolutions.com:7001/ws/webrtc/guest";
   loginUri = "http://" + window.location.hostname + "/wscsample/index.html";
-  logoutUri = "http://ocwscse.optaresolutions.com:7001/logout?redirect_uri=" + loginUri;
+  logoutUri = "http://ocwsc71se.optaresolutions.com:7001/logout?redirect_uri=" + loginUri;
   //**************Initailize Session******************/
   function initSession(userName){
 	var wsUrlEle = document.getElementById("wsUrl");
@@ -57,7 +57,7 @@ function includeJS(jsPath) {
     var hdg = document.getElementById("heading");
     hdg.innerHTML = demoName +"-- Welcome, " + userName;
     hdg.innerHTML += "<div align=center'><input type='button' name='logoutButton' id='logoutButton' value='Logout' onclick='logout()'/></div>";
-    var stunHtml = "<div align=center'> <span style='font-size:14px;'>STUN URL: </span><input type='text' name='stunUrl' id='stunUrl' size='50'/><input type='button' id='saveStunUrl' value='Save STUN URL' onclick='saveStun()' /><span id='stunUrlExample' style='color:gray;font-size:14px;'>Format: [IP Address]:[Port].  Example: ocwscme.optaresolutions.com:3478</span></div>";
+    var stunHtml = "<div align=center'> <span style='font-size:14px;'>STUN URL: </span><input type='text' name='stunUrl' id='stunUrl' size='50'/><input type='button' id='saveStunUrl' value='Save STUN URL' onclick='saveStun()' /><span id='stunUrlExample' style='color:gray;font-size:14px;'>Format: [IP Address]:[Port].  Example: ocwsc71me.optaresolutions.com:3478</span></div>";
     hdg.innerHTML += stunHtml;
 	if(localStorage.stunUrl){
 		document.getElementById("stunUrl").value = localStorage.stunUrl;
@@ -89,7 +89,7 @@ function includeJS(jsPath) {
   }
   // Modify UI according to authentication info. Set value for wsUri. 
   function initalizeRegisterUI() {
-    var wsHtml = "<div align=center'> <span style='font-size:14px;'>WebSocket URL: </span><input type='text' name='wsUrl' value='ws://ocwscse.optaresolutions.com:7001/ws/webrtc/guest' id='wsUrl' size='50'/><input type='button' id='saveWSUrl' value='Save WebSocket URL' onclick='saveWSUrl()' /><span style='color:gray;font-size:14px;'>Format: 'ws://[IP Address]:[Port]/[Path]'    Example: ws://ocwscse.optaresolutions.com:7001/ws/webrtc/guest</span></div>";
+    var wsHtml = "<div align=center'> <span style='font-size:14px;'>WebSocket URL: </span><input type='text' name='wsUrl' value='ws://ocwsc71se.optaresolutions.com:7001/ws/webrtc/guest' id='wsUrl' size='50'/><input type='button' id='saveWSUrl' value='Save WebSocket URL' onclick='saveWSUrl()' /><span style='color:gray;font-size:14px;'>Format: 'ws://[IP Address]:[Port]/[Path]'    Example: ws://ocwscse.optaresolutions.com:7001/ws/webrtc/guest</span></div>";
 
     var icmd = "<div id='userIdDiv'> Enter Your ID:<input type='text' name='userName' id='userName'/>    <span style='color:gray;font-size:14px;'>Example: bob@example.com </span> </div><input type='button' name='loginButton' id='loginButton'  value='Register' onclick='register()'/>";
     clearText("currentCommand");
@@ -105,7 +105,7 @@ function includeJS(jsPath) {
     userIdDiv =document.getElementById("userIdDiv");
    
     userIdDiv.hidden = false;
-    wsUri = "ws://ocwscse.optaresolutions.com:7001/ws/webrtc/guest";
+    wsUri = "ws://ocwsc71se.optaresolutions.com:7001/ws/webrtc/guest";
     logoutUri = loginUri;
 	  
     if(!userName){
