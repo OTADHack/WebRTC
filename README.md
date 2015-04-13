@@ -1,4 +1,4 @@
-WebRTC Share Bar Example App
+WebRTC API Sample
 =========
 
 Source code of a **WebRTC Sample** providing webRTC audio and video call.
