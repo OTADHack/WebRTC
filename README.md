@@ -37,3 +37,9 @@ Support
 ----
 
 If you have any doubt, ask it in [the Issues section](https://github.com/OTADHack/WebRTC/issues).
+
+
+License
+----
+
+Copyright © 2007, 2015, Oracle and/or its affiliates. All rights reserved. Usage only allowed for TADHack Developers.
